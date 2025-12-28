@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArticleCard } from './components/ArticleCard';
 import { ExperienceList } from './components/ExperienceList';
+import { ExperienceVisualization } from './components/ExperienceVisualization';
 import { apiService } from './services/api';
 import type { WritingResponse, Experience } from './types';
 import './App.css';
@@ -13,6 +14,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [currentTask, setCurrentTask] = useState<WritingResponse | null>(null);
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [experienceStats, setExperienceStats] = useState<any>(null);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,8 +28,19 @@ function App() {
     }
   };
 
+  // 加载经验统计
+  const loadExperienceStats = async () => {
+    try {
+      const stats = await apiService.getExperienceStats();
+      setExperienceStats(stats);
+    } catch (err) {
+      console.error('加载统计失败:', err);
+    }
+  };
+
   useEffect(() => {
     loadExperiences();
+    loadExperienceStats();
   }, []);
 
   // 提交写作请求
@@ -66,8 +79,8 @@ function App() {
       setFeedbackSubmitted(true);
       alert(response.message);
 
-      // 重新加载经验
-      await loadExperiences();
+      // 重新加载经验和统计数据
+      await Promise.all([loadExperiences(), loadExperienceStats()]);
 
       // 清空当前任务，准备下一次
       setTimeout(() => {
@@ -135,12 +148,13 @@ function App() {
         )}
 
         <section className="experiences-section">
+          <ExperienceVisualization stats={experienceStats} />
           <ExperienceList experiences={experiences} />
         </section>
       </main>
 
       <footer className="app-footer">
-        <p>通过不断学习您的偏好，提供更符合期望的文章内容</p>
+        <p>通过GRPO强化学习，不断优化写作效果</p>
       </footer>
     </div>
   );

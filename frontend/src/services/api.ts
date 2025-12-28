@@ -40,6 +40,14 @@ export const apiService = {
   },
 
   /**
+   * 获取经验统计数据
+   */
+  async getExperienceStats(): Promise<any> {
+    const response = await api.get('/experiences/stats');
+    return response.data;
+  },
+
+  /**
    * 健康检查
    */
   async healthCheck(): Promise<{ status: string }> {

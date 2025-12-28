@@ -1,0 +1,248 @@
+.experience-viz {
+  margin-top: 40px;
+}
+
+.experience-viz h2 {
+  color: #333;
+  margin-bottom: 24px;
+  font-size: 28px;
+}
+
+.experience-viz h3 {
+  color: #555;
+  margin-bottom: 16px;
+  font-size: 20px;
+  margin-top: 32px;
+}
+
+.viz-empty {
+  text-align: center;
+  padding: 60px 40px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  color: #666;
+  font-size: 16px;
+}
+
+/* 统计概览 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* 风格参数条形图 */
+.style-params-section {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.params-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.param-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.param-label {
+  min-width: 80px;
+  font-weight: 600;
+  color: #555;
+  font-size: 14px;
+}
+
+.param-bar-wrapper {
+  flex: 1;
+  height: 32px;
+  background: #f0f0f0;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.param-bar {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+  transition: width 0.5s ease;
+  border-radius: 16px;
+}
+
+.param-value {
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* 学习进度 */
+.learning-progress-section {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.progress-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.progress-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.progress-label {
+  min-width: 100px;
+  font-weight: 600;
+  color: #555;
+  font-size: 14px;
+}
+
+.progress-bar-container {
+  flex: 1;
+  height: 24px;
+  background: #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  transition: width 0.5s ease;
+}
+
+.progress-bar.confidence {
+  background: linear-gradient(90deg, #4caf50 0%, #8bc34a 100%);
+}
+
+.progress-text {
+  min-width: 80px;
+  text-align: right;
+  color: #666;
+  font-size: 13px;
+}
+
+/* GRPO指标 */
+.grpo-metrics {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.metric-label {
+  font-size: 13px;
+  color: #666;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.grpo-explanation {
+  margin-top: 20px;
+  padding: 16px;
+  background: #e8f4f8;
+  border-left: 4px solid #2196f3;
+  border-radius: 4px;
+}
+
+.grpo-explanation p {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.grpo-explanation strong {
+  color: #1976d2;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .param-bar-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .param-label {
+    min-width: auto;
+  }
+
+  .progress-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .progress-label {
+    min-width: auto;
+  }
+
+  .progress-text {
+    text-align: left;
+  }
+}

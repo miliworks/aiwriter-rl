@@ -1,11 +1,12 @@
 """
-写作服务 - 整合AI调用和经验学习
+写作服务 - 整合AI调用、经验学习和随机风格生成
 """
 from sqlalchemy.orm import Session
 from typing import Tuple, List
 from ..models import WritingTask, Article
 from .ai_service import AIService
 from .experience_service import ExperienceService
+from .style_generator import StyleGenerator
 import asyncio
 
 
@@ -16,10 +17,16 @@ class WritingService:
         self.db = db
         self.ai_service = AIService()
         self.experience_service = ExperienceService(db)
+        self.style_generator = StyleGenerator()
 
     async def create_writing_task(self, description: str) -> Tuple[WritingTask, List[Article]]:
         """
         创建写作任务并生成两篇文章
+
+        核心改进：
+        1. 使用随机风格生成，而非固定A/B模式
+        2. 支持从经验中学习偏好参数
+        3. 保持一定探索性以全面覆盖用户偏好空间
 
         Args:
             description: 用户输入的写作描述
@@ -35,30 +42,40 @@ class WritingService:
 
         # 2. 获取历史经验
         experiences = self.experience_service.get_active_experiences()
+        preferred_params = self.experience_service.get_preferred_style_params()
 
-        # 3. 并行生成两篇文章（变体A和B）
+        # 3. 生成两个差异较大的随机风格
+        if preferred_params:
+            # 如果有经验，基于偏好生成，但保持30%探索率
+            style_a = self.style_generator.generate_from_preferences(
+                preferred_params,
+                exploration_rate=0.3
+            )
+            # B版本完全随机，用于探索新空间
+            style_b = self.style_generator.generate_random_style()
+        else:
+            # 没有经验时，生成两个差异较大的随机风格
+            style_a, style_b = self.style_generator.generate_diverse_pair()
+
+        # 4. 并行生成两篇文章
         try:
             article_a_data, article_b_data = await asyncio.gather(
-                self.ai_service.generate_article(description, "A", experiences),
-                self.ai_service.generate_article(description, "B", experiences)
+                self.ai_service.generate_article(description, style_a, experiences),
+                self.ai_service.generate_article(description, style_b, experiences)
             )
 
-            # 4. 保存文章到数据库
+            # 5. 保存文章到数据库
             article_a = Article(
                 task_id=task.id,
                 content=article_a_data["content"],
-                variant_type=article_a_data["variant_type"],
-                structure_type=article_a_data["structure_type"],
-                tone=article_a_data["tone"],
+                variant_type="A",
                 style_params=article_a_data["style_params"]
             )
 
             article_b = Article(
                 task_id=task.id,
                 content=article_b_data["content"],
-                variant_type=article_b_data["variant_type"],
-                structure_type=article_b_data["structure_type"],
-                tone=article_b_data["tone"],
+                variant_type="B",
                 style_params=article_b_data["style_params"]
             )
 

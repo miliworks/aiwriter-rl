@@ -71,3 +71,8 @@ class Experience(Base):
 
     # 经验元数据
     metadata = Column(Text, comment="额外元数据JSON")
+
+    # GRPO相关字段
+    reward_mean = Column(Float, default=0.0, comment="平均奖励")
+    reward_std = Column(Float, default=1.0, comment="奖励标准差")
+    iteration = Column(Integer, default=0, comment="迭代次数")

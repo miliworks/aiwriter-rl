@@ -173,3 +173,22 @@ async def get_task(task_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/experiences/stats")
+async def get_experience_stats(db: Session = Depends(get_db)):
+    """
+    获取经验学习统计信息（用于可视化）
+
+    Args:
+        db: 数据库会话
+
+    Returns:
+        统计信息字典
+    """
+    try:
+        experience_service = ExperienceService(db)
+        stats = experience_service.get_experience_stats()
+        return stats
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
